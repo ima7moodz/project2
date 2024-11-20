@@ -11,6 +11,7 @@ const taskSchema = new mongoose.Schema({
   taskComplition: {
     type: Boolean,
     require: true,
+    default: false,
   },
   taskEndDate: {
     type: Date,

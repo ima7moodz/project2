@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Task</title>
+  </head>
+  <body>
+    <h1>Create a new Task</h1>
+    <form action="/task" method="POST">
+      <label for="task-name"> Task Name:</label>
+      <input type="text" name="taskName" />
+      <br />
+      <label for="task-description"> Task Description:</label>
+      <textarea name="taskDescription"></textarea>
+      <br />
+      <label for="task-end-date"> Task Description:</label>
+      <input type="datetime-local" name="taskEndDate" />
+
+      <br />
+
+      <button type="submit">Add Listing</button>
+    </form>
+  </body>
+</html>
