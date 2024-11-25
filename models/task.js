@@ -1,38 +1,17 @@
 const mongoose = require("mongoose")
 
-const taskSchema = new mongoose.Schema({
-  taskName: {
-    type: String,
-    require: true,
-  },
-  taskDescription: {
-    type: String,
-  },
-  taskComplition: {
-    type: Boolean,
-    require: true,
-    default: false,
-  },
-  taskEndDate: {
-    type: Date,
-    require: true,
-  },
-  taskType: {
-    type: String,
-    enum: ["private", "published"],
-    required: true,
-    default: "private",
-  },
-  taskOwner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  Group: {
-    type: mongoose.Types.ObjectId,
-    ref: "GroupTask",
-  },
-})
-
-const Task = mongoose.model("Task", taskSchema)
+// Check if the model is already compiled
+const Task =
+  mongoose.models.Task ||
+  mongoose.model(
+    "Task",
+    new mongoose.Schema({
+      taskName: { type: String, required: true },
+      taskDescription: { type: String },
+      taskCompletion: { type: Boolean, default: false },
+      taskEndDate: { type: Date, required: true },
+      taskOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    })
+  )
 
 module.exports = Task

@@ -3,15 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>All Task</title>
+    <title>All Tasks</title>
   </head>
   <body>
-    <h1>Thats all Task's you have</h1>
-    <a href="/task/new"> Add new Task</a>
-
+    <%- include('../partials/_navbar.ejs') %>
+    <h1>Your Tasks</h1>
+    <a href="/task/new">Create a new Task</a>
     <ul>
       <% tasks.forEach((task) => { %>
-      <li><%= task.taskName %></li>
+      <li>
+        <a href=""> <strong><%= task.taskName %></strong> </a>- <%=
+        task.taskDescription %> <% if (task.taskCompletion) { %>
+        <em>(Completed)</em>
+        <form
+          action="/task/<%= task._id %>/uncomplete?_method=PUT"
+          method="POST"
+          style="display: inline"
+        >
+          <button type="submit">Mark as Incomplete</button>
+        </form>
+        <% } else { %>
+        <form
+          action="/task/<%= task._id %>/complete?_method=PUT"
+          method="POST"
+          style="display: inline"
+        >
+          <button type="submit">Mark as Complete</button>
+        </form>
+        <% } %>
+      </li>
       <% }) %>
     </ul>
   </body>

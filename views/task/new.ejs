@@ -6,20 +6,19 @@
     <title>New Task</title>
   </head>
   <body>
+    <%- include('../partials/_navbar.ejs') %>
     <h1>Create a new Task</h1>
     <form action="/task" method="POST">
-      <label for="task-name"> Task Name:</label>
-      <input type="text" name="taskName" />
-      <br />
-      <label for="task-description"> Task Description:</label>
-      <textarea name="taskDescription"></textarea>
-      <br />
-      <label for="task-end-date"> Task Description:</label>
-      <input type="datetime-local" name="taskEndDate" />
-
-      <br />
-
-      <button type="submit">Add Listing</button>
+      <label for="task-name">Task Name:</label>
+      <input type="text" name="taskName" id="task-name" />
+      <br /><br />
+      <label for="task-description">Task Description:</label>
+      <textarea name="taskDescription" id="task-description"></textarea>
+      <br /><br />
+      <label for="task-end-date">End Date:</label>
+      <input type="datetime-local" name="taskEndDate" id="task-end-date" />
+      <br /><br />
+      <button type="submit">Create Task</button>
     </form>
   </body>
 </html>

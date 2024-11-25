@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Group Tasks</title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+    <h1>Group Tasks</h1>
+    <ul>
+      <% if (groups.length === 0) { %>
+      <p>No group tasks found. <a href="/groupTask/new">Create one now</a>.</p>
+      <% } else { %> <% groups.forEach((group) => { %>
+      <li>
+        <strong><%= group.groupName %></strong>: <%= group.groupDescription %>
+      </li>
+      <% }); %> <% } %>
+    </ul>
+    <a href="/groupTask/new">Create a New Group Task</a>
+  </body>
+</html>

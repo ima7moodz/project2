@@ -1,12 +1,12 @@
 <nav>
   <% if (user) { %>
-  <a href="/task"> View Your tasks</a>
+  <a href="/">Home</a>
+  <a href="/task">Tasks</a>
+  <a href="/groupTask">Groups</a>
   <a href="/auth/sign-out">Sign Out</a>
-
   <% } else { %>
+  <a href="/">Home</a>
   <a href="/auth/sign-up">Sign Up</a>
-
-  <a href="/auth/sign-in">Sign Ip</a>
-
+  <a href="/auth/sign-in">Sign In</a>
   <% } %>
 </nav>

@@ -1,34 +1,28 @@
 const express = require("express")
-const router = express.Router()
-
-const User = require("../models/user.js")
-
 const bcrypt = require("bcrypt")
+const User = require("../models/user")
+
+const router = express.Router()
 
 router.get("/sign-up", (req, res) => {
   res.render("auth/sign-up.ejs")
 })
 
 router.post("/sign-up", async (req, res) => {
-  // checking if the user already exist or not
-  const userInDatabase = await User.findOne({ username: req.body.username })
-  if (userInDatabase) {
-    return res.send("Username already taken.")
+  const { username, password, confirmPassword } = req.body
+
+  if (password !== confirmPassword) {
+    return res.send("Passwords do not match.")
   }
 
-  // checking if both password are equal or not
-  if (req.body.password !== req.body.confirmPassword) {
-    return res.send("Password and Confirm Password must match")
+  const existingUser = await User.findOne({ username })
+  if (existingUser) {
+    return res.send("Username is already taken.")
   }
 
-  // Register the user
-  // Use bcrypt library for password encryption
-  const hashedPassword = bcrypt.hashSync(req.body.password, 10) // 10 is the SALT , which is how many round I want it to be encrypted (More secure), the maximum is 15 but the stander is 10
-  req.body.password = hashedPassword
-
-  // validation logic
-  const user = await User.create(req.body)
-  res.send(`Thanks for signing up ${user.username}`)
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  await User.create({ username, password: hashedPassword })
+  res.send("User created successfully!")
 })
 
 router.get("/sign-in", (req, res) => {
@@ -36,29 +30,14 @@ router.get("/sign-in", (req, res) => {
 })
 
 router.post("/sign-in", async (req, res) => {
-  //Check if the user exist in the database
-  const userInDatabase = await User.findOne({ username: req.body.username })
+  const { username, password } = req.body
+  const user = await User.findOne({ username })
 
-  // Means if it's NULL
-  if (!userInDatabase) {
-    return res.send("Login failed. Please try again.")
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    return res.send("Invalid username or password.")
   }
 
-  // Validate if the entered password matches the one on the database
-  const validPassword = bcrypt.compareSync(
-    req.body.password,
-    userInDatabase.password
-  )
-  if (!validPassword) {
-    return res.send("Login failed. Please try again.")
-  }
-
-  //Log the user in
-  req.session.user = {
-    username: userInDatabase.username,
-    _id: userInDatabase._id,
-  }
-
+  req.session.user = { _id: user._id, username: user.username }
   res.redirect("/")
 })
 
