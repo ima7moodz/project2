@@ -7,7 +7,7 @@ const morgan = require("morgan")
 const session = require("express-session")
 const path = require("path")
 
-const isSignedIn = require("./middleware/is-signed-in")
+const isSignedIn = require("./middleware/is-Signed-in")
 const passUserToView = require("./middleware/pass-user-to-view")
 
 const app = express()
