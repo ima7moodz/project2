@@ -3,31 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
     <title>Edit this task: <%= task.taskName %></title>
   </head>
   <body>
-    <%- include('./partials/_navbar.ejs') %>
-    <h1>Edit a Task</h1>
-    <form action="/task<%= task._id %>?_method=PUT" method="POST">
-      <label for="task-name"> Task Name:</label>
-      <input type="text" name="taskName" value="<%= task.taskName %>" />
-      <br />
-      <label for="task-description"> Task Description:</label>
-      <textarea
-        name="taskDescription"
-        value="<%= task.taskDescription %>"
-      ></textarea>
-      <br />
-      <label for="task-end-date"> Task Description:</label>
-      <input
-        type="datetime-local"
-        name="taskEndDate"
-        value="<%= task.taskEndDate %>"
-      />
+    <%- include('../partials/_navbar.ejs') %>
+    <div class="container">
+      <h1>Edit a Task</h1>
+      <form action="/task/<%= task._id %>?_method=PUT" method="POST">
+        <label for="task-name"> Task Name:</label>
+        <input type="text" name="taskName" value="<%= task.taskName %>" />
+        <br />
+        <label for="task-description"> Task Description:</label>
+        <textarea name="taskDescription"><%= task.taskDescription %></textarea>
+        <br />
+        <label for="task-end-date"> Task Description:</label>
+        <input
+          type="datetime-local"
+          name="taskEndDate"
+          value="<%= new Date(task.taskEndDate).toISOString().slice(0, 16) %>"
+        />
 
-      <br />
+        <br />
 
-      <button type="submit">Update the Task</button>
-    </form>
+        <button type="submit">Update the Task</button>
+      </form>
+    </div>
   </body>
 </html>

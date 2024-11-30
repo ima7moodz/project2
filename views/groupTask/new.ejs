@@ -3,24 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
     <title>Create New Group</title>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-    <h1>Create a New Group</h1>
-    <form action="/groupTask" method="POST">
-      <label for="groupName">Group Name:</label>
-      <input type="text" id="groupName" name="groupName" required />
-      <br />
-      <label for="groupDescription">Group Description:</label>
-      <textarea
-        id="groupDescription"
-        name="groupDescription"
-        rows="4"
-        cols="50"
-      ></textarea>
-      <br />
-      <button type="submit">Create Group</button>
-    </form>
+    <div class="container">
+      <h1>Create a New Group</h1>
+      <form action="/groupTask" method="POST">
+        <label for="groupName">Group Name:</label>
+        <input type="text" id="groupName" name="groupName" required />
+        <br />
+        <label for="groupDescription">Group Description:</label>
+        <textarea
+          id="groupDescription"
+          name="groupDescription"
+          rows="4"
+          cols="50"
+        ></textarea>
+        <br />
+        <button type="submit">Create Group</button>
+      </form>
+    </div>
   </body>
 </html>

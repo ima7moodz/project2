@@ -3,36 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>All Tasks</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
+    <title>Your Tasks</title>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-    <h1>Your Tasks</h1>
-    <a href="/task/new">Create a new Task</a>
-    <ul>
-      <% tasks.forEach((task) => { %>
-      <li>
-        <a href=""> <strong><%= task.taskName %></strong> </a>- <%=
-        task.taskDescription %> <% if (task.taskCompletion) { %>
-        <em>(Completed)</em>
-        <form
-          action="/task/<%= task._id %>/uncomplete?_method=PUT"
-          method="POST"
-          style="display: inline"
-        >
-          <button type="submit">Mark as Incomplete</button>
-        </form>
-        <% } else { %>
-        <form
-          action="/task/<%= task._id %>/complete?_method=PUT"
-          method="POST"
-          style="display: inline"
-        >
-          <button type="submit">Mark as Complete</button>
-        </form>
+
+    <div class="container">
+      <h1>Your Tasks</h1>
+      <a href="/task/new">Create a new Task</a>
+
+      <!-- Display private tasks -->
+      <h2>Private Tasks</h2>
+      <ul>
+        <% if (privateTasks && privateTasks.length > 0) { %> <%
+        privateTasks.forEach((task) => { %>
+        <li class="<%= task.taskCompletion ? 'completed' : 'not-completed' %>">
+          <strong><%= task.taskName %></strong>
+          <p><%= task.taskDescription %></p>
+          <a id="more-info" href="/task/<%= task._id %>">More Information</a>
+          <% if (task.taskCompletion) { %>
+          <em>(Completed)</em>
+          <form
+            action="/task/<%= task._id %>/uncomplete?_method=PUT"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Mark as Incomplete</button>
+          </form>
+          <% } else { %>
+          <form
+            action="/task/<%= task._id %>/complete?_method=PUT"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Mark as Complete</button>
+          </form>
+          <% } %>
+        </li>
+        <% }) %> <% } else { %>
+        <p>You don't have any Tasks to do...</p>
         <% } %>
-      </li>
-      <% }) %>
-    </ul>
+      </ul>
+
+      <!--  Display group tasks -->
+      <h2>Group Tasks</h2>
+      <ul>
+        <% if (groupTasks && groupTasks.length > 0) { %> <%
+        groupTasks.forEach((task) => { %>
+        <li class="<%= task.taskCompletion ? 'completed' : 'not-completed' %>">
+          <strong><%= task.taskName %></strong>
+          <p><%= task.taskDescription %></p>
+          <a id="more-info" href="/task/<%= task._id %>">More Information</a>
+          <% if (task.taskCompletion) { %>
+          <em>(Completed)</em>
+          <form
+            action="/task/<%= task._id %>/uncomplete?_method=PUT"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Mark as Incomplete</button>
+          </form>
+          <% } else { %>
+          <form
+            action="/task/<%= task._id %>/complete?_method=PUT"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit">Mark as Complete</button>
+          </form>
+          <% } %>
+        </li>
+        <% }) %> <% } else { %>
+        <p>You don't have any Group Tasks to do...</p>
+        <% } %>
+      </ul>
+    </div>
   </body>
 </html>

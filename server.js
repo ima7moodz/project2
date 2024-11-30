@@ -31,6 +31,7 @@ app.use(
   })
 )
 app.use(passUserToView)
+app.use(express.static("public"))
 
 // Set view engine and views directory
 app.set("view engine", "ejs")
@@ -39,12 +40,12 @@ app.set("views", path.join(__dirname, "views"))
 // Controllers
 const authController = require("./controllers/auth")
 const taskController = require("./controllers/task")
-const groupController = require("./controllers/groupTask")
+const groupTaskController = require("./controllers/groupTask")
 
 // Routes
 app.use("/auth", authController)
 app.use("/task", isSignedIn, taskController)
-app.use("/groupTask", isSignedIn, groupController)
+app.use("/groupTask", isSignedIn, groupTaskController)
 
 // Landing page
 app.get("/", (req, res) => {

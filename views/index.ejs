@@ -3,22 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
     <title>Home Page</title>
   </head>
   <body>
     <%- include('./partials/_navbar.ejs') %>
-    <h1>Welcome to the Task App</h1>
-
-    <% if (user) { %>
-    <h1>Welcome, <%= user.username %>!</h1>
-    <p><a href="/task">View your tasks</a></p>
-    <p><a href="/group">View your groups</a></p>
-    <% } else { %>
-    <h1>Sign Up and get started!</h1>
-    <p>
-      <a href="/auth/sign-up">Sign up</a> or
-      <a href="/auth/sign-in">Sign in</a>.
-    </p>
-    <% } %>
+    <div class="container">
+      <h1>Welcome to the Task App</h1>
+      <% if (user) { %>
+      <h1><%= user.username %></h1>
+      <h3>About:</h3>
+      <p id="about">
+        Task App is your ultimate productivity companion! Our platform helps you
+        efficiently organize and manage your daily tasks, whether you're working
+        solo or collaborating in groups. With easy-to-use features and seamless
+        navigation, staying on top of your to-do list has never been easier.
+        Join us today and start achieving your goals!
+      </p>
+      <a href="/task">View your tasks</a>
+      <a href="/groupTask">View your groups</a>
+      <% } else { %>
+      <h1>Sign Up and get started!</h1>
+      <h3>About:</h3>
+      <p id="about">
+        Task App is your ultimate productivity companion! Our platform helps you
+        efficiently organize and manage your daily tasks, whether you're working
+        solo or collaborating in groups. With easy-to-use features and seamless
+        navigation, staying on top of your to-do list has never been easier.
+        Join us today and start achieving your goals!
+      </p>
+      <p>
+        <a href="/auth/sign-up">Sign up</a>
+        Or
+        <a href="/auth/sign-in">Sign in</a>
+      </p>
+      <% } %>
+    </div>
   </body>
 </html>

@@ -1,67 +1,122 @@
 const express = require("express")
 const Task = require("../models/task")
-const User = require("../models/user")
 
 const router = express.Router()
 
+// Show all tasks (both private and group tasks)
 router.get("/", async (req, res) => {
-  const tasks = await Task.find({ taskOwner: req.session.user._id })
-  res.render("task/index.ejs", { tasks })
+  try {
+    const userId = req.session.user._id // Get the current user's ID
+    const tasks = await Task.find({
+      $or: [
+        { taskOwner: userId }, // Private tasks owned by the user
+        {
+          groupTask: { $exists: true, $ne: null },
+          "groupTask.members": userId,
+        }, // Group tasks the user is a member of
+      ],
+    }).populate("groupTask")
+
+    // Separate tasks for rendering
+    const privateTasks = tasks.filter((task) => !task.groupTask)
+    const groupTasks = tasks.filter((task) => task.groupTask)
+
+    res.render("task/index.ejs", { privateTasks, groupTasks })
+  } catch (error) {
+    console.error("Error fetching tasks:", error)
+    res.status(500).send("Server Error")
+  }
 })
 
+// Render the form to create a new task
 router.get("/new", (req, res) => {
   res.render("task/new.ejs")
 })
 
+// Create a new task
 router.post("/", async (req, res) => {
-  req.body.taskOwner = req.session.user._id
-  await Task.create(req.body)
-  res.redirect("/task")
+  try {
+    req.body.taskOwner = req.session.user._id
+    await Task.create(req.body)
+    res.redirect("/task")
+  } catch (error) {
+    console.error("Error creating task:", error)
+    res.status(500).send("Server Error")
+  }
 })
 
-//mark the task if it complete
+// Mark a task as complete
 router.put("/:id/complete", async (req, res) => {
-  const task = await Task.findById(req.params.id)
-  task.taskCompletion = true
-  await task.save()
-  res.redirect("/task")
+  try {
+    const task = await Task.findById(req.params.id)
+    task.taskCompletion = true
+    await task.save()
+    res.redirect("/task")
+  } catch (error) {
+    console.error("Error marking task as complete:", error)
+    res.status(500).send("Server Error")
+  }
 })
 
+// Mark a task as incomplete
 router.put("/:id/uncomplete", async (req, res) => {
-  const task = await Task.findById(req.params.id)
-  task.taskCompletion = false
-  await task.save()
-  res.redirect("/task")
+  try {
+    const task = await Task.findById(req.params.id)
+    task.taskCompletion = false
+    await task.save()
+    res.redirect("/task")
+  } catch (error) {
+    console.error("Error marking task as incomplete:", error)
+    res.status(500).send("Server Error")
+  }
 })
 
-//edit the task
+// Show task details
+router.get("/:taskId", async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.taskId).populate("taskOwner")
+    res.render("task/show.ejs", { task })
+  } catch (error) {
+    console.error("Error fetching task details:", error)
+    res.status(500).send("Server Error")
+  }
+})
+
+// Delete a task
+router.delete("/:taskId", async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.taskId)
+    await task.deleteOne()
+    res.redirect("/task")
+  } catch (error) {
+    console.error("Error deleting task:", error)
+    res.redirect("/")
+  }
+})
+
+// Render the form to edit a task
 router.get("/:taskId/editTask", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.session.user._id)
-    const task = currentUser.task.id(req.params.taskId)
-    res.render("task/editTask.ejs", {
-      task: task,
-    })
+    const task = await Task.findById(req.params.taskId)
+    res.render("task/editTask.ejs", { task })
   } catch (error) {
-    console.log(error)
+    console.error("Error fetching task for editing:", error)
     res.redirect("/")
   }
 })
 
+// Update a task
 router.put("/:taskId", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.session.user._id)
-
-    const task = currentUser.task.id(req.params.taskId)
-
-    task.set(req.body)
-    await currentUser.save()
-
-    res.redirect(`/users/${currentUser._id}/task/${req.params.taskId}`)
+    const task = await Task.findById(req.params.taskId)
+    await task.updateOne(req.body)
+    res.redirect("/task")
   } catch (error) {
-    console.log(error)
+    console.error("Error updating task:", error)
     res.redirect("/")
   }
 })
+
+router.use
 
 module.exports = router

@@ -3,22 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
     <title>New Task</title>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-    <h1>Create a new Task</h1>
-    <form action="/task" method="POST">
-      <label for="task-name">Task Name:</label>
-      <input type="text" name="taskName" id="task-name" />
-      <br /><br />
-      <label for="task-description">Task Description:</label>
-      <textarea name="taskDescription" id="task-description"></textarea>
-      <br /><br />
-      <label for="task-end-date">End Date:</label>
-      <input type="datetime-local" name="taskEndDate" id="task-end-date" />
-      <br /><br />
-      <button type="submit">Create Task</button>
-    </form>
+
+    <div class="container">
+      <h1>Create a new Task</h1>
+      <form action="/task" method="POST">
+        <label for="task-name">Task Name:</label>
+        <input type="text" name="taskName" id="task-name" required />
+        <br /><br />
+        <label for="task-description">Task Description:</label>
+        <textarea name="taskDescription" id="task-description"></textarea>
+        <br /><br />
+        <label for="task-end-date">End Date:</label>
+        <input
+          type="datetime-local"
+          name="taskEndDate"
+          id="task-end-date"
+          required
+        />
+        <br /><br />
+        <button type="submit">Create Task</button>
+      </form>
+    </div>
   </body>
 </html>

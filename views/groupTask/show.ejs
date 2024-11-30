@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
+    <title>Group Details</title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+    <div class="container">
+      <h1><%= group.groupName %></h1>
+      <p><%= group.groupDescription %></p>
+      <p>Owner: <%= group.groupOwner.username %></p>
+      <p>Members:</p>
+      <ul>
+        <% group.usersInGroup.forEach((user) => { %>
+        <li><%= user.username %></li>
+        <% }); %>
+      </ul>
+
+      <% if (group.groupOwner && group.groupOwner._id.equals(currentUserId)) {
+      %>
+      <form action="/groupTask/<%= group._id %>?_method=DELETE" method="POST">
+        <button type="submit">Delete Group</button>
+      </form>
+      <% } %>
+    </div>
+    <div class="container">
+      <% if (currentUserId && group.usersInGroup.some(user =>
+      user._id.equals(currentUserId))) { %>
+      <h2>Add a Task</h2>
+      <form action="/groupTask/<%= group._id %>/task" method="POST">
+        <label for="taskName">Task Name:</label>
+        <input type="text" id="taskName" name="taskName" required />
+        <br />
+        <label for="taskDescription">Task Description:</label>
+        <textarea id="taskDescription" name="taskDescription"></textarea>
+        <br />
+        <label for="taskEndDate">End Date:</label>
+        <input type="date" id="taskEndDate" name="taskEndDate" required />
+        <br />
+        <button type="submit">Add Task</button>
+      </form>
+    </div>
+    <div class="container">
+      <h2>Tasks</h2>
+      <ul>
+        <% group.groupTask.forEach((task) => { %>
+        <li>
+          <strong><%= task.taskName %></strong>
+          <p><%= task.taskDescription %></p>
+          <br />
+          <small>End Date: <%= task.taskEndDate.toDateString() %></small>
+          <br />
+          <% if (task.taskCompletion) { %>
+          <strong>Task Completed</strong>
+          <% } else { %>
+          <strong>Task Not Completed</strong>
+          <% } %>
+        </li>
+        <% }); %>
+      </ul>
+      <% } else if (currentUserId) { %>
+      <form action="/groupTask/<%= group._id %>/join" method="POST">
+        <button type="submit">Join Group</button>
+      </form>
+      <% }%>
+    </div>
+  </body>
+</html>

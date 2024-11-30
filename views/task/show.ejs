@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/styles.css" />
+    <title><%= task.taskName %></title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+    <div class="container">
+      <h1><strong><%= task.taskName %></strong></h1>
+      <p><%= task.taskDescription %></p>
+      <h2>
+        <strong>Task End in: </strong> <%= task.taskEndDate.toDateString() %>
+      </h2>
+      <br />
+      <% if (task.taskCompletion) { %>
+      <em>(Completed)</em>
+      <form
+        action="/task/<%= task._id %>/uncomplete?_method=PUT"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit">Mark as Incomplete</button>
+      </form>
+      <% } else { %>
+      <form
+        action="/task/<%= task._id %>/complete?_method=PUT"
+        method="POST"
+        style="display: inline"
+      >
+        <button type="submit">Mark as Complete</button>
+      </form>
+      <% } %>
+
+      <div>
+        <a href="/task/<%= task._id %>/editTask"> Edit Task </a>
+        <form action="/task/<%= task._id %>?_method=DELETE" method="POST">
+          <button type="submit">Delete Task</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
