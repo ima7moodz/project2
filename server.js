@@ -6,7 +6,9 @@ const methodOverride = require("method-override")
 const morgan = require("morgan")
 const session = require("express-session")
 const path = require("path")
+
 const bcrypt = require("bcryptjs")
+const MongoStore = require("connect-mongo")
 
 const isSignedIn = require("./middleware/is-Signed-in")
 const passUserToView = require("./middleware/pass-user-to-view")
@@ -20,6 +22,17 @@ mongoose
   .then(() => console.log(`Connected to MongoDB: ${mongoose.connection.name}`))
   .catch((error) => console.error("Error connecting to MongoDB:", error))
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "defaultsecret",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      collectionName: "sessions",
+    }),
+  })
+)
 // Middleware
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"))
