@@ -23,8 +23,8 @@ router.get("/", async (req, res) => {
 
     res.render("task/index.ejs", { privateTasks, groupTasks })
   } catch (error) {
-    console.error("Error fetching tasks:", error)
-    res.status(500).send("Server Error")
+    console.error(error)
+    res.redirect("/")
   }
 })
 
@@ -40,8 +40,8 @@ router.post("/", async (req, res) => {
     await Task.create(req.body)
     res.redirect("/task")
   } catch (error) {
-    console.error("Error creating task:", error)
-    res.status(500).send("Server Error")
+    console.error(error)
+    res.redirect("/")
   }
 })
 
@@ -53,8 +53,8 @@ router.put("/:id/complete", async (req, res) => {
     await task.save()
     res.redirect("/task")
   } catch (error) {
-    console.error("Error marking task as complete:", error)
-    res.status(500).send("Server Error")
+    console.error(error)
+    res.redirect("/")
   }
 })
 
@@ -66,8 +66,8 @@ router.put("/:id/uncomplete", async (req, res) => {
     await task.save()
     res.redirect("/task")
   } catch (error) {
-    console.error("Error marking task as incomplete:", error)
-    res.status(500).send("Server Error")
+    console.error(error)
+    res.redirect("/")
   }
 })
 
@@ -77,8 +77,8 @@ router.get("/:taskId", async (req, res) => {
     const task = await Task.findById(req.params.taskId).populate("taskOwner")
     res.render("task/show.ejs", { task })
   } catch (error) {
-    console.error("Error fetching task details:", error)
-    res.status(500).send("Server Error")
+    console.error(error)
+    res.redirect("/")
   }
 })
 
@@ -100,7 +100,7 @@ router.get("/:taskId/editTask", async (req, res) => {
     const task = await Task.findById(req.params.taskId)
     res.render("task/editTask.ejs", { task })
   } catch (error) {
-    console.error("Error fetching task for editing:", error)
+    console.error(error)
     res.redirect("/")
   }
 })
@@ -112,7 +112,7 @@ router.put("/:taskId", async (req, res) => {
     await task.updateOne(req.body)
     res.redirect("/task")
   } catch (error) {
-    console.error("Error updating task:", error)
+    console.error(error)
     res.redirect("/")
   }
 })
